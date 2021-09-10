@@ -1,0 +1,37 @@
+---
+AccessModifierOffset: -4
+AlignAfterOpenBracket: Align
+AlignEscapedNewlines: Right
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Inline
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: true
+BinPackParameters: true
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterFunction: true
+    SplitEmptyFunction: false
+    SplitEmptyRecord: false
+    SplitEmptyNamespace: false
+BreakConstructorInitializers: BeforeComma
+ColumnLimit: 100
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 4
+FixNamespaceComments: true
+IncludeBlocks: Regroup
+IncludeCategories:
+    - Regex:    '^<audio/'
+      Priority: 1
+    - Regex:    '.*'
+      Priority: 2
+IndentWidth: 4
+IndentPPDirectives: AfterHash
+MaxEmptyLinesToKeep: 2
+PointerAlignment: Left
+ReflowComments: true
+SortIncludes: true
+SortUsingDeclarations: true
+SpaceAfterTemplateKeyword: false
+UseTab: Never
+...
