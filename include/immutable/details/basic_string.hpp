@@ -26,6 +26,18 @@
 namespace immutable {
 inline namespace v1 {
 
+namespace details {
+
+/// Used by the user-defined literal prevent allocations for literals as opposed
+/// to character arrays.
+template<typename CharT>
+struct basic_literal_string_ref {
+    const char* data;
+    size_t size;
+};
+
+}
+
 template<typename CharT, typename Traits = std::char_traits<CharT>>
 class basic_string {
 public: // Member types
@@ -69,11 +81,17 @@ public: // Constructors
         buf_.literal = &empty_literal_[0];
     }
 
+    constexpr explicit basic_string(details::basic_literal_string_ref<CharT> literal) noexcept
+      : size_{make_literal_size(literal.size)}
+    {
+        buf_.literal = literal.data;
+    }
+
     template<size_type N>
     constexpr explicit basic_string(value_type (&data)[N]) noexcept
-      : size_{make_literal_size(N - 1)}
+      : size_{make_external_size(N - 1)}
     {
-        buf_.literal = &data[0];
+        buf_.external = make_external_buf(&data[0], N - 1);
     }
 
     explicit basic_string(std::nullptr_t) = delete;
@@ -85,20 +103,10 @@ public: // Constructors
     basic_string(pointer data, size_type len)
       : size_{make_external_size(len)}
     {
-        const auto buf_size = (len + 1) * sizeof(char_type);
-        const auto external =
-            static_cast<external_buffer*>(malloc(sizeof(external_buffer) + buf_size));
-        if (!external)
-            throw std::bad_alloc();
-
-        new (external) external_buffer{};
-        memcpy(external_data(external), data, buf_size);
-
-        buf_.external = external;
+        buf_.external = make_external_buf(data, len);
     }
 
     basic_string(const basic_string& other)
-      : size_{other.size_}
     {
         copy(other);
     }
@@ -113,7 +121,7 @@ public: // Constructors
     template<size_type N>
     basic_string& operator=(value_type (&data)[N])
     {
-        return (*this) = basic_string{data};
+        return (*this) = basic_string{data, N - 1};
     }
 
     basic_string& operator=(std::nullptr_t) = delete;
@@ -267,6 +275,19 @@ private:
         return (size_ & 1) != 0;
     }
 
+    static external_buffer* make_external_buf(pointer data, size_type len)
+    {
+        const auto buf_size = (len + 1) * sizeof(char_type);
+        const auto external =
+            static_cast<external_buffer*>(malloc(sizeof(external_buffer) + buf_size));
+        if (!external)
+            throw std::bad_alloc();
+
+        new (external) external_buffer{};
+        memcpy(external_data(external), data, buf_size);
+        return external;
+    }
+
     void copy(const basic_string& other) noexcept
     {
         if (other.has_external_buffer()) {
@@ -275,6 +296,7 @@ private:
         } else {
             buf_.literal = other.buf_.literal;
         }
+        size_ = other.size_;
     }
 
     void release() noexcept

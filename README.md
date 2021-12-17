@@ -8,9 +8,26 @@ copy an `std::string` object another heap-allocation has to be made because the
 standard does not allow `std::string` to use copy-on-write semantics. 
 
 If you  don't need the mutability, this library provides a better option: an 
-immutable string with (mostly) the same interface as `std::string`. Since 
-individual characters are immutable string literals can be referenced instead of
-copied. Similarly copying a string object just bumps the reference count on the
+immutable string with (mostly) the same interface as `std::string`. 
+
+Since individual characters are immutable, string literals can be referenced 
+instead of copied:
+
+```c++
+#include <immutable/string.hpp>
+#include <iostream>
+
+int main()
+{
+    // you _must_ use the user-defined literal to avoid memory allocation
+    using namespace immutable::literals;
+    // no memory allocated by immutable::string here
+    const auto s = "hello"_is;
+    std::cout << s << '\n;
+}
+```
+
+Similarly copying a string object just bumps the reference count on the
 allocated buffer:
 
 ```c++
@@ -19,8 +36,10 @@ allocated buffer:
 
 int main()
 {
-    // no memory allocated by immutable::string here
-    std::cout << immutable::string{"hello"} << '\n;
+    const immutable::string s1 = "hello, world";
+    // no additional memory allocated by immutable::string here
+    const immutable::string s2 = s1;
+    std::cout << s2 << '\n;
 }
 ```
 

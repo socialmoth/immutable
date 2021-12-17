@@ -16,12 +16,13 @@ namespace details {
 
 template<std::size_t N>
 struct literal_string {
-    char chars_[N] {};
-    
+    char data[N] {};
+    static constexpr std::size_t size = N - 1;
+
     constexpr literal_string(const char (&s)[N]) noexcept
     {
         for (std::size_t i = 0; i < N; ++i)
-            chars_[i] = s[i];
+            data[i] = s[i];
     }
 };
 

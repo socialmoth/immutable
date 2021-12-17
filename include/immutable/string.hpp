@@ -15,6 +15,12 @@ inline namespace v1 {
 
 using string = basic_string<char>;
 
+namespace details {
+
+using string_literal_ref = basic_literal_string_ref<char>;
+
+} // namespace details
+
 } // namespace v1
 } // namespace immutable
 
@@ -26,7 +32,7 @@ namespace literals {
 
 string operator""_is(const char* str, std::size_t len)
 {
-    return string(str, len);
+    return string(details::string_literal_ref{str, len});
 }
 
 } // namespace literals
@@ -44,7 +50,7 @@ namespace literals {
 template<details::literal_string Literal>
 constexpr string operator""_is()
 {
-    return string(Literal.chars_);
+    return string(details::literal_string_ref{&Literal.data[0], Literal.size});
 }
 
 } // namespace literals
