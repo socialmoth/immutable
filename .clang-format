@@ -2,12 +2,14 @@
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
 AlignEscapedNewlines: Right
+AlignOperands: AlignAfterOperator
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: Inline
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: true
 BinPackParameters: true
+BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
 BraceWrapping:
     AfterFunction: true
@@ -21,10 +23,14 @@ ContinuationIndentWidth: 4
 FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories:
-    - Regex:    '^<audio/'
+    - Regex:    '^<immutable/'
       Priority: 1
-    - Regex:    '.*'
+    - Regex:    '^"'
       Priority: 2
+    - Regex:    '.*'
+      Priority: 3
+    - Regex:    '^<[a-f_]+>$'
+      Priority: 4
 IndentWidth: 4
 IndentPPDirectives: AfterHash
 MaxEmptyLinesToKeep: 2

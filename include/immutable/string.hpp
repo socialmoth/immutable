@@ -30,7 +30,7 @@ namespace immutable {
 inline namespace v1 {
 namespace literals {
 
-string operator""_is(const char* str, std::size_t len)
+inline string operator""_is(const char* str, std::size_t len)
 {
     return string(details::string_literal_ref{str, len});
 }
@@ -48,7 +48,7 @@ inline namespace v1 {
 namespace literals {
 
 template<details::literal_string Literal>
-constexpr string operator""_is()
+inline constexpr string operator""_is()
 {
     return string(details::literal_string_ref{&Literal.data[0], Literal.size});
 }

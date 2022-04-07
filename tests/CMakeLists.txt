@@ -6,13 +6,15 @@ include(CTest)
 set(IMMUTABLE_TESTS ${PROJECT_NAME}-tests)
 
 add_executable(${IMMUTABLE_TESTS}
+    slice.test.cpp
+    string_view.test.cpp
     string.test.cpp
     main.test.cpp
 )
 
 target_compile_options(${IMMUTABLE_TESTS}
     PRIVATE
-        --coverage -Og -g
+        --coverage -O0 -g
         -fsanitize=address,undefined
 )
 
