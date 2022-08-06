@@ -8,6 +8,8 @@
 #    error "This file is only meant for C++ compilers"
 #endif // defined(__cplusplus)
 
+#include <immutable/details/basic_string_range.hpp>
+
 #include <algorithm>
 #include <atomic>
 #include <cstring>
@@ -15,13 +17,6 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
-
-#if __has_include(<compare>)
-#    if __cpp_impl_three_way_comparison >= 201907L && __cpp_lib_three_way_comparison >= 201907L
-#        define IMMUTABLE_HAS_SPACESHIP 1
-#        include <compare>
-#    endif
-#endif
 
 namespace immutable {
 inline namespace v1 {
@@ -32,30 +27,33 @@ namespace details {
 /// to character arrays.
 template<typename CharT>
 struct basic_literal_string_ref {
-    const char* data;
+    const CharT* data;
     size_t size;
 };
 
-}
+using literal_string_ref = basic_literal_string_ref<char>;
+using wliteral_string_reg = basic_literal_string_ref<wchar_t>;
 
-template<typename CharT, typename Traits = std::char_traits<CharT>>
-class basic_string {
+} // namespace details
+
+template<typename CharT, typename Traits>
+class basic_string
+  : public details::basic_string_range<CharT, Traits, basic_string<CharT, Traits>> {
 public: // Member types
-    using traits_type = Traits;
-    using value_type = const CharT;
-    using size_type = std::size_t;
-    using difference_type = std::ptrdiff_t;
-    using reference = value_type&;
-    using const_reference = reference;
-    using pointer = value_type*;
-    using const_pointer = pointer;
-    using iterator = pointer;
-    using const_iterator = const_pointer;
-    using reverse_iterator = std::reverse_iterator<iterator>;
-    using const_reverse_iterator = std::reverse_iterator<iterator>;
+    using base_type = details::basic_string_range<CharT, Traits, basic_string_view<CharT, Traits>>;
 
-public:
-    static constexpr const size_type npos = -1;
+    using traits_type = base_type::traits_type;
+    using value_type = base_type::value_type;
+    using size_type = base_type::size_type;
+    using difference_type = base_type::difference_type;
+    using reference = base_type::reference;
+    using const_reference = base_type::const_reference;
+    using pointer = base_type::pointer;
+    using const_pointer = base_type::const_pointer;
+    using iterator = base_type::iterator;
+    using const_iterator = base_type::const_iterator;
+    using reverse_iterator = base_type::reverse_iterator;
+    using const_reverse_iterator = base_type::const_reverse_iterator;
 
 private:
     using char_type = CharT;
@@ -71,59 +69,24 @@ private:
 
     static constexpr value_type empty_literal_[1] = {};
 
-    size_type size_;
+    // TODO: We can also support SBO storage if we steal one byte of the size
+
     buffer buf_;
+    size_type size_;
 
 public: // Constructors
-    constexpr basic_string() noexcept
-      : size_{make_literal_size(0)}
-    {
-        buf_.literal = &empty_literal_[0];
-    }
-
-    constexpr explicit basic_string(details::basic_literal_string_ref<CharT> literal) noexcept
-      : size_{make_literal_size(literal.size)}
-    {
-        buf_.literal = literal.data;
-    }
-
+    constexpr basic_string() noexcept;
+    constexpr explicit basic_string(details::basic_literal_string_ref<CharT> literal) noexcept;
     template<size_type N>
-    constexpr explicit basic_string(value_type (&data)[N]) noexcept
-      : size_{make_external_size(N - 1)}
-    {
-        buf_.external = make_external_buf(&data[0], N - 1);
-    }
-
+    explicit basic_string(value_type (&data)[N]) noexcept;
     explicit basic_string(std::nullptr_t) = delete;
+    explicit basic_string(pointer data);
+    basic_string(pointer data, size_type len);
+    basic_string(const basic_string& other);
 
-    explicit basic_string(pointer data)
-      : basic_string{data, traits_type::length(data)}
-    {}
-
-    basic_string(pointer data, size_type len)
-      : size_{make_external_size(len)}
-    {
-        buf_.external = make_external_buf(data, len);
-    }
-
-    basic_string(const basic_string& other)
-    {
-        copy(other);
-    }
-
-    basic_string& operator=(const basic_string& other)
-    {
-        release();
-        copy(other);
-        return *this;
-    }
-
+    basic_string& operator=(const basic_string& other);
     template<size_type N>
-    basic_string& operator=(value_type (&data)[N])
-    {
-        return (*this) = basic_string{data, N - 1};
-    }
-
+    basic_string& operator=(value_type (&data)[N]);
     basic_string& operator=(std::nullptr_t) = delete;
 
     // TODO: Custom move constructor would be slightly more efficient, e.g. it
@@ -132,234 +95,59 @@ public: // Constructors
     // TODO: Move assignment operator could be efficiently implemented using
     //       swap, which we need anyway.
 
-    ~basic_string()
-    {
-        release();
-    }
+    ~basic_string();
 
 public: // Element access
-    constexpr const_reference at(size_type pos) const
-    {
-        if (pos >= size())
-            throw std::out_of_range("pos");
-        return data()[pos];
-    }
-
-    constexpr const_reference operator[](size_type pos) const noexcept
-    {
-        return data()[pos];
-    }
-
-    constexpr const_reference front() const noexcept
-    {
-        return data()[0];
-    }
-
-    constexpr const_reference back() const noexcept
-    {
-        return data()[size() - 1];
-    }
-
-    constexpr const_pointer data() const noexcept
-    {
-        return c_str();
-    }
-
-    constexpr const_pointer c_str() const noexcept
-    {
-        if (has_external_buffer())
-            return external_data();
-        return buf_.literal;
-    }
-
-    constexpr operator std::basic_string_view<CharT, Traits>() const noexcept
-    {
-        return {data(), size()};
-    }
-
-public: // Iterators
-    constexpr const_iterator begin() const noexcept
-    {
-        return data();
-    }
-
-    constexpr const_iterator cbegin() const noexcept
-    {
-        return data();
-    }
-
-    constexpr const_iterator end() const noexcept
-    {
-        return data() + size() + 1;
-    }
-
-    constexpr const_iterator cend() const noexcept
-    {
-        return data() + size() + 1;
-    }
-
-    constexpr const_reverse_iterator rbegin() const noexcept
-    {
-        return {begin()};
-    }
-
-    constexpr const_reverse_iterator crbegin() const noexcept
-    {
-        return {begin()};
-    }
-
-    constexpr const_reverse_iterator rend() const noexcept
-    {
-        return {end()};
-    }
-
-    constexpr const_reverse_iterator crend() const noexcept
-    {
-        return {end()};
-    }
-
-public: // Capacity
-    /// Returns `true` if the string has zero code units.
-    [[nodiscard]] constexpr bool empty() const noexcept
-    {
-        return size() == 0;
-    }
-
-    /// Returns the number of code units in the string
-    constexpr size_type size() const noexcept
-    {
-        return size_ >> 1;
-    }
-
-public: // Operations
-    constexpr int compare(const basic_string& rhs) const noexcept
-    {
-        // TODO: Since we know the length of both strings, we can do better than
-        // this.
-        return compare(rhs.data());
-    }
-
-    constexpr int compare(pointer rhs) const noexcept
-    {
-        const auto lhs = data();
-        if (lhs == rhs)
-            return 0;
-        // TODO: This is only valid for basic_string<char>
-        return strcmp(lhs, rhs);
-    }
+    constexpr const_pointer c_str() const noexcept;
 
 private:
-    constexpr char_type* external_data() const noexcept
-    {
-        return external_data(buf_.external);
-    }
+    constexpr char_type* external_data() const noexcept;
+    static constexpr char_type* external_data(external_buffer* external) noexcept;
+    static constexpr size_type make_literal_size(size_type n);
+    static constexpr size_type make_external_size(size_type n);
+    constexpr bool has_external_buffer() const noexcept;
+    static external_buffer* make_external_buf(pointer data, size_type len);
+    void copy(const basic_string& other) noexcept;
+    void release() noexcept;
 
-    static constexpr char_type* external_data(external_buffer* external) noexcept
-    {
-        return reinterpret_cast<char_type*>(reinterpret_cast<char*>(external) +
-                                            sizeof(external_buffer));
-    }
-
-    static constexpr size_type make_literal_size(size_type n)
-    {
-        return (n << 1) | 0;
-    }
-
-    static constexpr size_type make_external_size(size_type n)
-    {
-        return (n << 1) | 1;
-    }
-
-    constexpr bool has_external_buffer() const noexcept
-    {
-        return (size_ & 1) != 0;
-    }
-
-    static external_buffer* make_external_buf(pointer data, size_type len)
-    {
-        const auto buf_size = (len + 1) * sizeof(char_type);
-        const auto external =
-            static_cast<external_buffer*>(malloc(sizeof(external_buffer) + buf_size));
-        if (!external)
-            throw std::bad_alloc();
-
-        new (external) external_buffer{};
-        memcpy(external_data(external), data, buf_size);
-        return external;
-    }
-
-    void copy(const basic_string& other) noexcept
-    {
-        if (other.has_external_buffer()) {
-            buf_.external = other.buf_.external;
-            buf_.external->ref_count.fetch_add(1);
-        } else {
-            buf_.literal = other.buf_.literal;
-        }
-        size_ = other.size_;
-    }
-
-    void release() noexcept
-    {
-        if (has_external_buffer()) {
-            const auto refs = buf_.external->ref_count.fetch_sub(1) - 1;
-            if (refs == 0) {
-                buf_.external->~external_buffer();
-                free(buf_.external);
-            }
-        }
-    }
+public: // basic_string_range
+    //friend base_type;
+    constexpr const_pointer get_data() const noexcept;
+    constexpr size_type get_size() const noexcept;
 };
-
-template<typename CharT, typename Traits>
-inline std::ostream& operator<<(std::ostream& os, const basic_string<CharT, Traits>& s)
-{
-    return os << s.c_str();
-}
-
-#ifdef IMMUTABLE_HAS_SPACESHIP
-template<class CharT, class Traits>
-inline constexpr auto operator<=>(const basic_string<CharT, Traits>& lhs,
-                                  const std::basic_string<CharT, Traits>& rhs) noexcept
-{
-    const auto order = lhs.compare(rhs);
-    if (order < 0) {
-        return std::strong_ordering::less;
-    } else if (order == 0) {
-        return std::strong_ordering::equal;
-    } else if (order > 0) {
-        return std::strong_ordering::greater;
-    }
-}
-#else
-#    define IMMUTABLE_DEFINE_COMPARISON_OPERATOR(op)                                               \
-        template<class CharT, class Traits>                                                        \
-        inline constexpr bool operator op(const basic_string<CharT, Traits>& lhs,                  \
-                                          const basic_string<CharT, Traits>& rhs) noexcept         \
-        {                                                                                          \
-            return lhs.compare(rhs) op 0;                                                          \
-        }                                                                                          \
-                                                                                                   \
-        template<class CharT, class Traits>                                                        \
-        inline constexpr bool operator op(const basic_string<CharT, Traits>& lhs,                  \
-                                          const CharT* rhs) noexcept                               \
-        {                                                                                          \
-            return lhs.compare(rhs) op 0;                                                          \
-        }
-
-IMMUTABLE_DEFINE_COMPARISON_OPERATOR(==)
-IMMUTABLE_DEFINE_COMPARISON_OPERATOR(!=)
-IMMUTABLE_DEFINE_COMPARISON_OPERATOR(<)
-IMMUTABLE_DEFINE_COMPARISON_OPERATOR(<=)
-IMMUTABLE_DEFINE_COMPARISON_OPERATOR(>)
-IMMUTABLE_DEFINE_COMPARISON_OPERATOR(>=)
-#endif // IMMUTABLE_HAS_SPACESHIP
-
-#undef IMMUTABLE_DEFINE_COMPARISON_OPERATOR
 
 } // namespace v1
 } // namespace immutable
 
-#undef IMMUTABLE_HAS_SPACESHIP
+
+#if __cpp_nontype_template_args < 201911
+
+namespace immutable {
+inline namespace v1 {
+namespace literals {
+
+template<typename CharT>
+basic_string<CharT> operator""_is(const CharT* str, std::size_t len);
+
+} // namespace literals
+} // namespace v1
+} // namespace immutable
+
+#else // if compiler supports non-type template args
+
+#    include <immutable/details/literal_string.hpp>
+
+namespace immutable {
+inline namespace v1 {
+namespace literals {
+
+template<details::literal_string Literal>
+constexpr string operator""_is();
+
+} // namespace literals
+} // namespace v1
+} // namespace immutable
+
+#endif // if compiler supports non-type template args
 
 #endif // !defined(IMMUTABLE_BASIC_STRING_HPP)
