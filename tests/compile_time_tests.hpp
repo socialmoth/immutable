@@ -1,8 +1,8 @@
 // Copyright Teis Johansen 2021
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://boost.org/LICENSE_1_0.txt)
-#ifndef IMMUTABLE_TESTS_COMPILE_TIME_HPP
-#define IMMUTABLE_TESTS_COMPILE_TIME_HPP
+#ifndef ISTLIB_TESTS_COMPILE_TIME_HPP
+#define ISTLIB_TESTS_COMPILE_TIME_HPP
 
 #include <type_traits>
 #include <cstddef>
@@ -33,4 +33,4 @@ COMPILE_TIME_TEST(assignable_from_nullptr, std::declval<T>() = nullptr);
 } // namespace v1
 } // namespace immutable
 
-#endif // !defined(IMMUTABLE_TESTS_COMPILE_TIME_HPP)
+#endif // !defined(ISTLIB_TESTS_COMPILE_TIME_HPP)

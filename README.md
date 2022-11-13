@@ -14,7 +14,7 @@ Since individual characters are immutable, string literals can be referenced
 instead of copied:
 
 ```c++
-#include <immutable/string.hpp>
+#include <ist/string.hpp>
 #include <iostream>
 
 int main()
@@ -31,7 +31,7 @@ Similarly copying a string object just bumps the reference count on the
 allocated buffer:
 
 ```c++
-#include <immutable/string.hpp>
+#include <ist/string.hpp>
 #include <iostream>
 
 int main()
@@ -48,7 +48,7 @@ the length of the string, you _can_ still assign a new value to immutable string
 objects:
 
 ```c++
-#include <immutable/string.hpp>
+#include <ist/string.hpp>
 #include <iostream>
 
 int main()

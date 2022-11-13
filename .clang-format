@@ -23,7 +23,7 @@ ContinuationIndentWidth: 4
 FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories:
-    - Regex:    '^<immutable/'
+    - Regex:    '^<ist/'
       Priority: 1
     - Regex:    '^"'
       Priority: 2
