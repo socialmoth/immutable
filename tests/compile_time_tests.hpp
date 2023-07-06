@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <utility>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 namespace test {
 
@@ -31,6 +31,6 @@ COMPILE_TIME_TEST(assignable_from_nullptr, std::declval<T>() = nullptr);
 
 } // namespace test
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // !defined(ISTLIB_TESTS_COMPILE_TIME_HPP)

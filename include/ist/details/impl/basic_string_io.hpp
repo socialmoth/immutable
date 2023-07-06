@@ -12,7 +12,7 @@
 
 #include <iosfwd>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 namespace details {
 
@@ -25,6 +25,6 @@ inline std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, T
 
 } // namespace details
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // !defined(ISTLIB_BASIC_STRING_IO_IMPL_HPP)

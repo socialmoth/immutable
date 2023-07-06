@@ -20,8 +20,8 @@ instead of copied:
 int main()
 {
     // you _must_ use the user-defined literal to avoid memory allocation
-    using namespace immutable::literals;
-    // no memory allocated by immutable::string here
+    using namespace ist::literals;
+    // no memory allocated by ist::string here
     const auto s = "hello"_is;
     std::cout << s << '\n;
 }
@@ -36,9 +36,9 @@ allocated buffer:
 
 int main()
 {
-    const immutable::string s1 = "hello, world";
-    // no additional memory allocated by immutable::string here
-    const immutable::string s2 = s1;
+    const ist::string s1 = "hello, world";
+    // no additional memory allocated by ist::string here
+    const ist::string s2 = s1;
     std::cout << s2 << '\n;
 }
 ```
@@ -53,7 +53,7 @@ objects:
 
 int main()
 {
-    using namespace immutable::literals;
+    using namespace ist::literals;
     auto s = "hello"_is;
     s = "goodbye";
     std::cout << s << '\n;

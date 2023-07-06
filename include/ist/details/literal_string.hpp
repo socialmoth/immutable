@@ -10,7 +10,7 @@
 
 #include <cstddef>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 namespace details {
 
@@ -28,6 +28,6 @@ struct literal_string {
 
 } // namespace details
 } // inline namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // !defined(ISTLIB_DETAILS_LITERAL_STRING_HPP)

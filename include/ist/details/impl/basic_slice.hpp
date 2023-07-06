@@ -10,7 +10,7 @@
 
 #include <ist/details/basic_slice.hpp>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 
 template<typename CharT, typename Traits>
@@ -70,6 +70,6 @@ inline constexpr auto basic_slice<CharT, Traits>::get_size() const noexcept -> s
 }
 
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // !defined(ISTLIB_BASIC_SLICE_IMPL_HPP)

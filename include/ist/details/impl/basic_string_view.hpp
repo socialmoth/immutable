@@ -10,7 +10,7 @@
 
 #include <string>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 
 template<typename CharT, typename Traits>
@@ -59,6 +59,6 @@ inline constexpr auto basic_string_view<CharT, Traits>::get_size() const noexcep
 }
 
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // !defined(ISTLIB_BASIC_STRING_VIEW_IMPL_HPP)

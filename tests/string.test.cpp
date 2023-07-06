@@ -8,12 +8,12 @@
 #include <doctest.h>
 
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 namespace test {
 
 TEST_CASE("default constructible"
-          * doctest::description("immutable::string is default constructible")
+          * doctest::description("ist::string is default constructible")
           * doctest::test_suite("string"))
 {
     const string s;
@@ -23,7 +23,7 @@ TEST_CASE("default constructible"
 }
 
 TEST_CASE("literal construction"
-          * doctest::description("immutable::string can be constructed from a string literal")
+          * doctest::description("ist::string can be constructed from a string literal")
           * doctest::test_suite("string"))
 {
     const string s{"hello, world"};
@@ -31,16 +31,16 @@ TEST_CASE("literal construction"
 }
 
 TEST_CASE("user-defined literal construction"
-          * doctest::description("immutable::string can be constructed from a user-defined literal")
+          * doctest::description("ist::string can be constructed from a user-defined literal")
           * doctest::test_suite("string"))
 {
-    using namespace immutable::literals;
+    using namespace ist::literals;
     const string s = "hello, world"_is;
     CHECK(s.size() == strlen("hello, world"));
 }
 
 TEST_CASE("character pointer construction"
-          * doctest::description("immutable::string can be constructed from a character pointer")
+          * doctest::description("ist::string can be constructed from a character pointer")
           * doctest::test_suite("string"))
 {
     const char* s = "hello, world";
@@ -49,7 +49,7 @@ TEST_CASE("character pointer construction"
     CHECK(s1 == s);        // but the contents must be the same.
 }
 
-TEST_CASE("copy construction" * doctest::description("immutable::string can be copy-constructed")
+TEST_CASE("copy construction" * doctest::description("ist::string can be copy-constructed")
           * doctest::test_suite("string"))
 {
     const string l1{"hello, world"};
@@ -63,24 +63,24 @@ TEST_CASE("copy construction" * doctest::description("immutable::string can be c
 }
 
 TEST_CASE("not constructible from nullptr"
-          * doctest::description("immutable::string cannot be constructed from nullptr")
+          * doctest::description("ist::string cannot be constructed from nullptr")
           * doctest::test_suite("string"))
 {
     CHECK(!constructible_from_nullptr_v<string>);
 }
 
 TEST_CASE("assignable from string literal"
-          * doctest::description("immutable::string can be assigned to string literal")
+          * doctest::description("ist::string can be assigned to string literal")
           * doctest::test_suite("string"))
 {
-    using namespace immutable::literals;
+    using namespace ist::literals;
     auto s = "hello"_is;
     s = "goodbye";
     CHECK(s == "goodbye");
 }
 
 TEST_CASE("not assignable from nullptr"
-          * doctest::description("immutable::string cannot be assigned to nullptr")
+          * doctest::description("ist::string cannot be assigned to nullptr")
           * doctest::test_suite("string"))
 {
     CHECK(!assignable_from_nullptr_v<string>);
@@ -88,4 +88,4 @@ TEST_CASE("not assignable from nullptr"
 
 } // namespace test
 } // namespace v1
-} // namespace immutable
+} // namespace ist

@@ -12,7 +12,7 @@
 
 #include <string>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 
 template<typename CharT, typename Traits>
@@ -62,6 +62,6 @@ public: // basic_string_range
 };
 
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // !defined(ISTLIB_BASIC_STRING_VIEW_HPP)

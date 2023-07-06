@@ -18,7 +18,7 @@
 #include <string>
 #include <string_view>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 
 template<typename CharT, typename Traits>
@@ -170,12 +170,12 @@ inline void basic_string<CharT, Traits>::release() noexcept
 }
 
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 
 #if __cpp_nontype_template_args < 201911
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 namespace literals {
 
@@ -187,13 +187,13 @@ inline basic_string<CharT> operator""_is(const CharT* str, std::size_t len)
 
 } // namespace literals
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #else // if compiler supports non-type template args
 
 #    include <ist/details/literal_string.hpp>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 namespace literals {
 
@@ -205,7 +205,7 @@ inline constexpr string operator""_is()
 
 } // namespace literals
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // if compiler supports non-type template args
 

@@ -10,7 +10,7 @@
 
 #include <ist/details/basic_string_range.hpp>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 namespace details {
 
@@ -142,6 +142,6 @@ basic_string_range<CharT, Traits, Derived>::compare(basic_slice<CharT, Traits> r
 
 } // namespace details
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // !defined(ISTLIB_BASIC_STRING_RANGE_IMPL_HPP)

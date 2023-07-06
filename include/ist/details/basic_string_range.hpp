@@ -13,7 +13,7 @@
 #include <stdexcept>
 #include <type_traits>
 
-namespace immutable {
+namespace ist {
 inline namespace v1 {
 namespace details {
 
@@ -146,6 +146,6 @@ IMMUTABLE_DEFINE_COMPARISON_OPERATOR(>=)
 
 } // namespace details
 } // namespace v1
-} // namespace immutable
+} // namespace ist
 
 #endif // !defined(ISTLIB_BASIC_STRING_RANGE_HPP)
