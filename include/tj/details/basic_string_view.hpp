@@ -1,24 +1,24 @@
 // Copyright Teis Johansen 2021
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://boost.org/LICENSE_1_0.txt)
-#ifndef ISTLIB_BASIC_SLICE_HPP
-#define ISTLIB_BASIC_SLICE_HPP
+#ifndef TJ_STRING_BASIC_STRING_VIEW_HPP
+#define TJ_STRING_BASIC_STRING_VIEW_HPP
 
 #ifndef __cplusplus
 #    error "This file is only meant for C++ compilers"
 #endif // defined(__cplusplus)
 
-#include <ist/details/basic_string_range.hpp>
+#include <tj/details/basic_string_range.hpp>
 
-#include <iterator>
 #include <string>
 
-namespace ist {
+namespace tj {
 inline namespace v1 {
 
 template<typename CharT, typename Traits>
-class basic_slice : public details::basic_string_range<CharT, Traits, basic_slice<CharT, Traits>> {
-public: // Member types
+class basic_string_view
+  : public details::basic_string_range<CharT, Traits, basic_string_view<CharT, Traits>> {
+public:
     using base_type = details::basic_string_range<CharT, Traits, basic_string_view<CharT, Traits>>;
 
     using traits_type = base_type::traits_type;
@@ -39,27 +39,21 @@ private:
     size_type size_;
 
 public: // Constructors
-    constexpr basic_slice() noexcept;
-    constexpr basic_slice(const basic_slice& other) noexcept = default;
-    constexpr basic_slice(pointer data, size_type size) noexcept;
-    constexpr basic_slice(pointer data) noexcept;
-
-    constexpr basic_slice(const basic_string<CharT, Traits>& s) noexcept;
+    constexpr basic_string_view() noexcept;
+    constexpr basic_string_view(const basic_string_view& other) noexcept = default;
+    constexpr basic_string_view(pointer data) noexcept;
+    constexpr basic_string_view(const basic_string<CharT, Traits>& s) noexcept;
 
     template<typename Allocator>
-    constexpr basic_slice(const std::basic_string<CharT, Traits, Allocator>& s) noexcept;
+    constexpr basic_string_view(const std::basic_string<CharT, Traits, Allocator>& s) noexcept;
 
-    // template<std::contiguous_iterator First, std::sized_sentinel_for<First> Last>
-    template<typename First, typename Last>
-    constexpr basic_slice(First first, Last last);
-
-    template<typename Range>
-    constexpr basic_slice(Range&& rng);
-
-    constexpr basic_slice(std::nullptr_t) = delete;
+    constexpr basic_string_view(std::nullptr_t) = delete;
 
 public: // Assignment
-    constexpr basic_slice& operator=(const basic_slice& view) noexcept = default;
+    constexpr basic_string_view& operator=(const basic_string_view& view) noexcept = default;
+
+public: // Element access
+    constexpr const_pointer c_str() const noexcept;
 
 public: // basic_string_range
     //friend base_type;
@@ -68,6 +62,6 @@ public: // basic_string_range
 };
 
 } // namespace v1
-} // namespace ist
+} // namespace tj
 
-#endif // !defined(ISTLIB_BASIC_SLICE_HPP)
+#endif // !defined(TJ_STRING_BASIC_STRING_VIEW_HPP)

@@ -1,8 +1,8 @@
 // Copyright Teis Johansen 2021
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://boost.org/LICENSE_1_0.txt)
-#ifndef ISTLIB_DETAILS_LITERAL_STRING_HPP
-#define ISTLIB_DETAILS_LITERAL_STRING_HPP
+#ifndef TJ_STRING_DETAILS_LITERAL_STRING_HPP
+#define TJ_STRING_DETAILS_LITERAL_STRING_HPP
 
 #ifndef __cplusplus
 #    error "This file is only meant for C++ compilers"
@@ -10,7 +10,7 @@
 
 #include <cstddef>
 
-namespace ist {
+namespace tj {
 inline namespace v1 {
 namespace details {
 
@@ -28,6 +28,6 @@ struct literal_string {
 
 } // namespace details
 } // inline namespace v1
-} // namespace ist
+} // namespace tj
 
-#endif // !defined(ISTLIB_DETAILS_LITERAL_STRING_HPP)
+#endif // !defined(TJ_STRING_DETAILS_LITERAL_STRING_HPP)

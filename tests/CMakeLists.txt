@@ -3,33 +3,33 @@
 # (See accompanying file LICENSE or copy at http://boost.org/LICENSE_1_0.txt)
 include(CTest)
 
-set(ISTLIB_TESTS ${PROJECT_NAME}-tests)
+set(TJ_STRING_TESTS ${PROJECT_NAME}-tests)
 
-add_executable(${ISTLIB_TESTS}
+add_executable(${TJ_STRING_TESTS}
     slice.test.cpp
     string_view.test.cpp
     string.test.cpp
     main.test.cpp
 )
 
-target_compile_options(${ISTLIB_TESTS}
+target_compile_options(${TJ_STRING_TESTS}
     PRIVATE
         --coverage -O0 -g
         -fsanitize=address,undefined
 )
 
-target_compile_definitions(${ISTLIB_TESTS}
+target_compile_definitions(${TJ_STRING_TESTS}
     PRIVATE
         -DDEBUG
 )
 
-target_link_libraries(${ISTLIB_TESTS}
+target_link_libraries(${TJ_STRING_TESTS}
     PRIVATE
-        ${ISTLIB}
+        ${TJ_STRING}
         doctest
         --coverage
         asan
         ubsan
 )
 
-add_test(NAME "unit" COMMAND ${ISTLIB_TESTS})
+add_test(NAME "unit" COMMAND ${TJ_STRING_TESTS})

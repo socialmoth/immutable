@@ -1,8 +1,8 @@
 // Copyright Teis Johansen 2021
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://boost.org/LICENSE_1_0.txt)
-#ifndef ISTLIB_BASIC_STRING_RANGE_HPP
-#define ISTLIB_BASIC_STRING_RANGE_HPP
+#ifndef TJ_STRING_BASIC_STRING_RANGE_HPP
+#define TJ_STRING_BASIC_STRING_RANGE_HPP
 
 #ifndef __cplusplus
 #    error "This file is only meant for C++ compilers"
@@ -13,7 +13,7 @@
 #include <stdexcept>
 #include <type_traits>
 
-namespace ist {
+namespace tj {
 inline namespace v1 {
 namespace details {
 
@@ -146,6 +146,6 @@ IMMUTABLE_DEFINE_COMPARISON_OPERATOR(>=)
 
 } // namespace details
 } // namespace v1
-} // namespace ist
+} // namespace tj
 
-#endif // !defined(ISTLIB_BASIC_STRING_RANGE_HPP)
+#endif // !defined(TJ_STRING_BASIC_STRING_RANGE_HPP)

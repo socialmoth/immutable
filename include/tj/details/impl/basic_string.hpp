@@ -1,14 +1,14 @@
 // Copyright Teis Johansen 2021
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://boost.org/LICENSE_1_0.txt)
-#ifndef ISTLIB_BASIC_STRING_IMPL_HPP
-#define ISTLIB_BASIC_STRING_IMPL_HPP
+#ifndef TJ_STRING_BASIC_STRING_IMPL_HPP
+#define TJ_STRING_BASIC_STRING_IMPL_HPP
 
 #ifndef __cplusplus
 #    error "This file is only meant for C++ compilers"
 #endif // defined(__cplusplus)
 
-#include <ist/details/basic_string_range.hpp>
+#include <tj/details/basic_string_range.hpp>
 
 #include <algorithm>
 #include <atomic>
@@ -18,7 +18,7 @@
 #include <string>
 #include <string_view>
 
-namespace ist {
+namespace tj {
 inline namespace v1 {
 
 template<typename CharT, typename Traits>
@@ -170,12 +170,12 @@ inline void basic_string<CharT, Traits>::release() noexcept
 }
 
 } // namespace v1
-} // namespace ist
+} // namespace tj
 
 
 #if __cpp_nontype_template_args < 201911
 
-namespace ist {
+namespace tj {
 inline namespace v1 {
 namespace literals {
 
@@ -187,13 +187,13 @@ inline basic_string<CharT> operator""_is(const CharT* str, std::size_t len)
 
 } // namespace literals
 } // namespace v1
-} // namespace ist
+} // namespace tj
 
 #else // if compiler supports non-type template args
 
-#    include <ist/details/literal_string.hpp>
+#    include <tj/details/literal_string.hpp>
 
-namespace ist {
+namespace tj {
 inline namespace v1 {
 namespace literals {
 
@@ -205,8 +205,8 @@ inline constexpr string operator""_is()
 
 } // namespace literals
 } // namespace v1
-} // namespace ist
+} // namespace tj
 
 #endif // if compiler supports non-type template args
 
-#endif // !defined(ISTLIB_BASIC_STRING_IMPL_HPP)
+#endif // !defined(TJ_STRING_BASIC_STRING_IMPL_HPP)

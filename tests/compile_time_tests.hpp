@@ -1,14 +1,14 @@
 // Copyright Teis Johansen 2021
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://boost.org/LICENSE_1_0.txt)
-#ifndef ISTLIB_TESTS_COMPILE_TIME_HPP
-#define ISTLIB_TESTS_COMPILE_TIME_HPP
+#ifndef TJ_STRING_TESTS_COMPILE_TIME_HPP
+#define TJ_STRING_TESTS_COMPILE_TIME_HPP
 
 #include <type_traits>
 #include <cstddef>
 #include <utility>
 
-namespace ist {
+namespace tj {
 inline namespace v1 {
 namespace test {
 
@@ -31,6 +31,6 @@ COMPILE_TIME_TEST(assignable_from_nullptr, std::declval<T>() = nullptr);
 
 } // namespace test
 } // namespace v1
-} // namespace ist
+} // namespace tj
 
-#endif // !defined(ISTLIB_TESTS_COMPILE_TIME_HPP)
+#endif // !defined(TJ_STRING_TESTS_COMPILE_TIME_HPP)

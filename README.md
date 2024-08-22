@@ -14,14 +14,14 @@ Since individual characters are immutable, string literals can be referenced
 instead of copied:
 
 ```c++
-#include <ist/string.hpp>
+#include <tj/string.hpp>
 #include <iostream>
 
 int main()
 {
     // you _must_ use the user-defined literal to avoid memory allocation
-    using namespace ist::literals;
-    // no memory allocated by ist::string here
+    using namespace tj::literals;
+    // no memory allocated by tj::string here
     const auto s = "hello"_is;
     std::cout << s << '\n;
 }
@@ -31,14 +31,14 @@ Similarly copying a string object just bumps the reference count on the
 allocated buffer:
 
 ```c++
-#include <ist/string.hpp>
+#include <tj/string.hpp>
 #include <iostream>
 
 int main()
 {
-    const ist::string s1 = "hello, world";
-    // no additional memory allocated by ist::string here
-    const ist::string s2 = s1;
+    const tj::string s1 = "hello, world";
+    // no additional memory allocated by tj::string here
+    const tj::string s2 = s1;
     std::cout << s2 << '\n;
 }
 ```
@@ -48,12 +48,12 @@ the length of the string, you _can_ still assign a new value to immutable string
 objects:
 
 ```c++
-#include <ist/string.hpp>
+#include <tj/string.hpp>
 #include <iostream>
 
 int main()
 {
-    using namespace ist::literals;
+    using namespace tj::literals;
     auto s = "hello"_is;
     s = "goodbye";
     std::cout << s << '\n;

@@ -1,7 +1,7 @@
 // Copyright Teis Johansen 2021
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE or copy at http://boost.org/LICENSE_1_0.txt)
-#include <ist/string.hpp>
+#include <tj/string.hpp>
 
 #include "compile_time_tests.hpp"
 
@@ -9,12 +9,12 @@
 #include <doctest.h>
 #include <vector>
 
-namespace ist {
+namespace tj {
 inline namespace v1 {
 namespace test {
 
 TEST_CASE("default constructible"
-          * doctest::description("ist::slice is default constructible")
+          * doctest::description("tj::slice is default constructible")
           * doctest::test_suite("slice"))
 {
     const slice ss;
@@ -23,7 +23,7 @@ TEST_CASE("default constructible"
 }
 
 TEST_CASE("character pointer construction"
-          * doctest::description("ist::slice can be constructed from a character pointer")
+          * doctest::description("tj::slice can be constructed from a character pointer")
           * doctest::test_suite("slice"))
 {
     const char* s = "hello, world";
@@ -32,8 +32,8 @@ TEST_CASE("character pointer construction"
     CHECK(ss.size() == strlen(s));
 }
 
-TEST_CASE("ist::string construction"
-          * doctest::description("ist::slice can be constructed from ist::string")
+TEST_CASE("tj::string construction"
+          * doctest::description("tj::slice can be constructed from tj::string")
           * doctest::test_suite("slice"))
 {
     const string s{"hello, world"};
@@ -43,7 +43,7 @@ TEST_CASE("ist::string construction"
 }
 
 TEST_CASE("std::string construction"
-          * doctest::description("ist::slice can be constructed from std::string")
+          * doctest::description("tj::slice can be constructed from std::string")
           * doctest::test_suite("slice"))
 {
     const std::string s{"hello, world"};
@@ -53,7 +53,7 @@ TEST_CASE("std::string construction"
 }
 
 TEST_CASE("character pointer construction"
-          * doctest::description("ist::slice can be constructed from std::vector<char>")
+          * doctest::description("tj::slice can be constructed from std::vector<char>")
           * doctest::test_suite("slice"))
 {
     const char s[] = "hello, world";
@@ -63,7 +63,7 @@ TEST_CASE("character pointer construction"
     CHECK(ss.size() == v.size());
 }
 
-TEST_CASE("copy construction" * doctest::description("ist::slice can be copy-constructed")
+TEST_CASE("copy construction" * doctest::description("tj::slice can be copy-constructed")
           * doctest::test_suite("slice"))
 {
     const slice ss1{"hello, world"};
@@ -73,7 +73,7 @@ TEST_CASE("copy construction" * doctest::description("ist::slice can be copy-con
 }
 
 TEST_CASE("not constructible from nullptr"
-          * doctest::description("ist::slice cannot be constructed from nullptr")
+          * doctest::description("tj::slice cannot be constructed from nullptr")
           * doctest::test_suite("slice"))
 {
     CHECK(!constructible_from_nullptr_v<slice>);
@@ -81,4 +81,4 @@ TEST_CASE("not constructible from nullptr"
 
 } // namespace test
 } // namespace v1
-} // namespace ist
+} // namespace tj
